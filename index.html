@@ -114,7 +114,14 @@
     border-radius: var(--radius-sm); padding: 9px 12px;
     color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px;
     transition: border-color 0.15s, box-shadow 0.15s;
+    width: 100%; box-sizing: border-box;
+  }
+  input[type="date"] {
+    -webkit-appearance: none;
+    appearance: none;
+    display: block;
     width: 100%;
+    box-sizing: border-box;
   }
   input:focus, select:focus, textarea:focus {
     outline: none; border-color: var(--accent);
