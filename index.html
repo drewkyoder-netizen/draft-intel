@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Draft Prospect Intel</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #171b24;
+    --surface2: #1e2330;
+    --border: #2a2f3d;
+    --border-light: #343a4d;
+    --text: #e8ecf5;
+    --text-muted: #7a8099;
+    --text-dim: #4a5068;
+    --accent: #4f8ef7;
+    --accent-glow: rgba(79,142,247,0.15);
+    --green: #3ecf8e;
+    --red: #f75f5f;
+    --yellow: #f7b84b;
+    --orange: #f78c2a;
+    --s1-bg: #2d1a1a; --s1: #f75f5f;
+    --s2-bg: #2d201a; --s2: #f78c4b;
+    --s3-bg: #2d271a; --s3: #f7b84b;
+    --s4-bg: #1e2330; --s4: #7a8099;
+    --s5-bg: #1a2d22; --s5: #3ecf8e;
+    --s6-bg: #1a2a2d; --s6: #3ec4cf;
+    --s7-bg: #1a1f2d; --s7: #4f8ef7;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(15,17,23,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 56px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .logo-mark {
+    width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+  }
+  .logo-mark img { width: 36px; height: 36px; object-fit: contain; }
+  .topbar-title { font-size: 14px; font-weight: 600; letter-spacing: 0.02em; }
+  .topbar-sub { font-size: 11px; color: var(--text-muted); font-family: 'DM Mono', monospace; }
+  .topbar-actions { display: flex; gap: 10px; align-items: center; }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 8px 16px; border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+    cursor: pointer; border: none; transition: all 0.15s;
+  }
+  .btn-ghost {
+    background: transparent; color: var(--text-muted); border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { background: var(--surface2); color: var(--text); border-color: var(--border-light); }
+  .btn-primary {
+    background: var(--accent); color: #fff;
+  }
+  .btn-primary:hover { background: #6ba3f9; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(79,142,247,0.3); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+  .btn-success { background: var(--green); color: #0f1117; }
+  .btn-success:hover { background: #5ddba5; }
+  .btn-danger-ghost { background: transparent; color: var(--red); border: 1px solid rgba(247,95,95,0.3); }
+  .btn-danger-ghost:hover { background: rgba(247,95,95,0.1); }
+  .btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* ── LAYOUT ── */
+  .main { max-width: 900px; margin: 0 auto; padding: 32px 24px 80px; }
+
+  /* ── SECTION HEADERS ── */
+  .section-label {
+    font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim);
+    margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px 24px; margin-bottom: 16px;
+  }
+
+  /* ── FORM GRID ── */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group.full { grid-column: 1 / -1; }
+  label {
+    font-size: 11px; font-weight: 500; color: var(--text-muted);
+    letter-spacing: 0.04em; text-transform: uppercase; font-family: 'DM Mono', monospace;
+  }
+  input, select, textarea {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 9px 12px;
+    color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    width: 100%;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none; border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+  select option { background: var(--surface2); }
+  textarea { resize: vertical; min-height: 72px; line-height: 1.5; }
+
+  /* ── PILLAR SCALE ── */
+  .pillar-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); margin-bottom: 12px; overflow: hidden;
+  }
+  .pillar-header {
+    padding: 14px 20px 0; display: flex; justify-content: space-between; align-items: center;
+  }
+  .pillar-name { font-size: 14px; font-weight: 600; }
+  .pillar-score-display {
+    font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 500;
+    color: var(--text-dim); transition: color 0.2s;
+  }
+  .scale-row {
+    display: flex; gap: 6px; padding: 14px 20px 0;
+  }
+  .scale-btn {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px;
+    cursor: pointer; padding: 8px 4px 10px; border-radius: 8px;
+    border: 1.5px solid transparent; background: transparent;
+    transition: all 0.15s; color: var(--text-muted);
+  }
+  .scale-btn:hover { background: var(--surface2); border-color: var(--border-light); }
+  .scale-btn.active { border-color: currentColor; }
+  .scale-btn[data-score="1"] { --sc: var(--s1); --sb: var(--s1-bg); color: var(--s1); }
+  .scale-btn[data-score="2"] { --sc: var(--s2); --sb: var(--s2-bg); color: var(--s2); }
+  .scale-btn[data-score="3"] { --sc: var(--s3); --sb: var(--s3-bg); color: var(--s3); }
+  .scale-btn[data-score="4"] { --sc: var(--s4); --sb: var(--s4-bg); color: var(--s4); }
+  .scale-btn[data-score="5"] { --sc: var(--s5); --sb: var(--s5-bg); color: var(--s5); }
+  .scale-btn[data-score="6"] { --sc: var(--s6); --sb: var(--s6-bg); color: var(--s6); }
+  .scale-btn[data-score="7"] { --sc: var(--s7); --sb: var(--s7-bg); color: var(--s7); }
+  .scale-btn.active { background: var(--sb); }
+  .score-circle {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--surface2); display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500;
+    transition: background 0.15s;
+  }
+  .scale-btn.active .score-circle { background: var(--sc); color: var(--bg); }
+  .score-desc { font-size: 9px; text-align: center; line-height: 1.35; color: inherit; opacity: 0.85; }
+  .scale-ends {
+    display: flex; justify-content: space-between;
+    padding: 6px 20px 0; font-size: 9px; color: var(--text-dim);
+    font-family: 'DM Mono', monospace; font-style: italic;
+  }
+  .pillar-notes { padding: 12px 20px 16px; }
+  .pillar-notes textarea { min-height: 56px; font-size: 13px; }
+  .call-questions {
+    padding: 0 20px 14px;
+    border-top: 1px solid var(--border); margin-top: 12px;
+  }
+  .call-questions-toggle {
+    display: flex; align-items: center; gap: 8px; padding: 10px 0 0;
+    cursor: pointer; font-size: 11px; color: var(--text-muted);
+    font-family: 'DM Mono', monospace; letter-spacing: 0.06em;
+    text-transform: uppercase; user-select: none;
+  }
+  .call-questions-toggle svg { transition: transform 0.2s; }
+  .call-questions-toggle.open svg { transform: rotate(90deg); }
+  .questions-list { padding-top: 10px; display: none; }
+  .questions-list.open { display: block; }
+  .q-item {
+    display: flex; gap: 10px; padding: 8px 0;
+    border-bottom: 1px solid var(--border); font-size: 12px; color: var(--text-muted); line-height: 1.5;
+  }
+  .q-item:last-child { border-bottom: none; }
+  .q-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-dim); padding-top: 2px; flex-shrink: 0; }
+
+  /* ── INJURY HISTORY ── */
+  .injury-row {
+    display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 10px; align-items: end;
+    padding: 10px 0; border-bottom: 1px solid var(--border);
+  }
+  .injury-row:last-child { border-bottom: none; }
+  .add-injury-btn {
+    display: flex; align-items: center; gap: 6px; padding: 8px 0;
+    color: var(--accent); font-size: 12px; font-weight: 500; cursor: pointer;
+    background: none; border: none; font-family: 'DM Sans', sans-serif;
+  }
+  .add-injury-btn:hover { color: #6ba3f9; }
+  .remove-btn {
+    background: none; border: none; color: var(--text-dim); cursor: pointer;
+    padding: 6px; border-radius: 6px; transition: all 0.15s;
+  }
+  .remove-btn:hover { background: rgba(247,95,95,0.1); color: var(--red); }
+
+  /* ── RED FLAG / RECOMMENDATION ── */
+  .rec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; }
+  .flag-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .flag-btn {
+    display: flex; align-items: center; gap: 7px;
+    padding: 8px 14px; border-radius: 20px; cursor: pointer;
+    font-size: 12px; font-weight: 500; border: 1.5px solid var(--border);
+    background: var(--bg); color: var(--text-muted); transition: all 0.15s;
+  }
+  .flag-btn:hover { border-color: var(--border-light); color: var(--text); }
+  .flag-btn.active-green { border-color: var(--green); color: var(--green); background: rgba(62,207,142,0.08); }
+  .flag-btn.active-yellow { border-color: var(--yellow); color: var(--yellow); background: rgba(247,184,75,0.08); }
+  .flag-btn.active-orange { border-color: var(--orange); color: var(--orange); background: rgba(247,140,42,0.08); }
+  .flag-btn.active-red { border-color: var(--red); color: var(--red); background: rgba(247,95,95,0.08); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar-wrap { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .progress-bar { flex: 1; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.3s; }
+  .progress-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-dim); white-space: nowrap; }
+
+  /* ── GOOGLE SHEETS MODAL ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface); border: 1px solid var(--border-light);
+    border-radius: 16px; padding: 28px; width: 100%; max-width: 520px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+  }
+  .modal-title { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+  .modal-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; }
+  .modal-steps { margin-bottom: 20px; }
+  .step-item {
+    display: flex; gap: 12px; padding: 10px 0;
+    border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .step-item:last-child { border-bottom: none; }
+  .step-num {
+    width: 22px; height: 22px; border-radius: 50%; background: var(--accent);
+    color: #fff; font-size: 10px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
+  }
+  .code-block {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 14px; margin: 10px 0;
+    font-family: 'DM Mono', monospace; font-size: 11px; color: var(--green);
+    line-height: 1.6; white-space: pre-wrap; word-break: break-all;
+  }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px; z-index: 300;
+    background: var(--surface2); border: 1px solid var(--border-light);
+    border-radius: 10px; padding: 12px 18px;
+    font-size: 13px; color: var(--text); display: flex; align-items: center; gap: 10px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    transform: translateY(80px); opacity: 0; transition: all 0.3s;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast-icon { font-size: 16px; }
+
+  /* ── SUBMIT AREA ── */
+  .submit-area {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: rgba(15,17,23,0.95); backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border); padding: 16px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .submit-status { font-size: 12px; color: var(--text-muted); }
+  .submit-status span { color: var(--text); font-weight: 500; }
+  .submit-actions { display: flex; gap: 10px; }
+
+  /* ── MISC ── */
+  hr.divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 20px; padding: 3px 10px; font-size: 11px; color: var(--text-muted);
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo-mark"><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBB
+ZG9iZSBJbGx1c3RyYXRvciAyNC4wLjEsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9u
+OiA2LjAwIEJ1aWxkIDApICAtLT4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeG1s
+bnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53
+My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiDQoJIHZpZXdCb3g9IjAgMCA0MDAgNDAw
+IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA0MDAgNDAwOyIgeG1sOnNwYWNlPSJw
+cmVzZXJ2ZSI+DQo8c3R5bGUgdHlwZT0idGV4dC9jc3MiPg0KCS5zdDB7ZmlsbDojMUQ0MjhBO30N
+Cgkuc3Qxe2ZpbGw6I0ZEQjkyNzt9DQo8L3N0eWxlPg0KPGc+DQoJPHBhdGggY2xhc3M9InN0MCIg
+ZD0iTTM1MCwxOTkuOWMwLDgyLjgtNjcuMSwxNDkuOS0xNDkuOSwxNDkuOXMtMTUwLTY3LjEtMTUw
+LTE0OS45UzExNy4yLDUwLDIwMC4xLDUwUzM1MCwxMTcuMSwzNTAsMTk5LjkiLz4NCgk8cGF0aCBj
+bGFzcz0ic3QxIiBkPSJNMjk4LjIsMTAxLjhjLTI2LjItMjYuMi02MS4xLTQwLjYtOTguMS00MC42
+cy03MS44LDE0LjQtOTguMSw0MC42Yy0yNi4yLDI2LjItNDAuNiw2MS4xLTQwLjYsOTguMQ0KCQlz
+MTQuNCw3MS44LDQwLjYsOTguMWMyNi4yLDI2LjIsNjEuMSw0MC42LDk4LjEsNDAuNnM3MS44LTE0
+LjQsOTguMS00MC42YzI2LjItMjYuMiw0MC42LTYxLjEsNDAuNi05OC4xUzMyNC4zLDEyOC4xLDI5
+OC4yLDEwMS44DQoJCSBNMTA3LjIsMTA3LjFjMjQuOC0yNC44LDU3LjctMzguNSw5Mi44LTM4LjVj
+MzUsMCw2OCwxMy43LDkyLjgsMzguNXMzOC41LDU3LjcsMzguNSw5Mi44YzAsMTguOS0zLjksMzcu
+MS0xMS40LDUzLjgNCgkJYy0xNS45LTUuNC0zMS41LTExLjQtNDYuOS0xOC4zYy0yLTAuOS00LTEu
+OC02LjEtMi43bC02LTIuOGwtMy0xLjRsLTMtMS40bC02LTNjLTEuOS0xLTMuOS0yLTUuOS0zLjFs
+LTIuOS0xLjUNCgkJYy0xLTAuNS0xLjktMS4xLTIuOS0xLjZsLTUuOC0zLjJsLTUuNy0zLjRjLTE1
+LjItOC45LTI5LjktMTguOS00My43LTI5LjhjLTYuOS01LjUtMTMuNi0xMS4zLTIwLTE3LjNjLTMu
+Mi0zLjEtNi4zLTYuMi05LjMtOS4zDQoJCWMtMC44LTAuOC0xLjUtMS42LTIuMi0yLjRjLTAuOC0w
+LjgtMS40LTEuNi0yLjItMi41Yy0wLjgtMC45LTEuNC0xLjYtMi4xLTIuNWwtMC4xLTAuMWMtMC4z
+LTkuNi0wLjQtMTUuNC0wLjQtMTUuNGwtNi41LTEuNXY4LjgNCgkJaC01LjZWMTMwbC03LDEuNmww
+LjEsMy40bC0zLjMsMS44YzAuMSwyLjgsMC4yLDYuMywwLjIsMTAuN2MtMi43LDQuNi0zMS43LDU0
+LjktNTMuNSw3MC4zQzY5LjUsMjEyLDY5LDIwNiw2OSwxOTkuOQ0KCQlDNjguOSwxNjQuOSw4Mi41
+LDEzMS45LDEwNy4yLDEwNy4xIE0yNzkuNiwyNjQuM2wtMTMuNiwwLjVsLTExLTI4LjZsMi4xLDEu
+MWw2LjEsM2MyLDEsNCwxLjksNi4xLDIuOWMwLjYsMC4zLDEuMiwwLjYsMS43LDAuOA0KCQlMMjc5
+LjYsMjY0LjN6IE0yNzYuMywyNDYuNGM1LjUsMi41LDExLDQuOSwxNi40LDcuMWw0LjUsMTAuMWwt
+MTMuNiwwLjVMMjc2LjMsMjQ2LjR6IE0yNjIsMjY0LjlsLTEzLjgsMC41bC0xNC40LTQwLjgNCgkJ
+YzAuOSwwLjUsMS44LDEuMSwyLjcsMS41bDMsMS42YzEuOSwxLjEsMy45LDIuMiw1LjksMy4zbDQu
+NSwyLjRMMjYyLDI2NC45eiBNMjQ0LjEsMjY1LjVsLTEyLjMsMC40bC0xOC01My42DQoJCWMyLjgs
+MS44LDUuNSwzLjYsOC4zLDUuM2w1LjgsMy42bDAuOCwwLjVMMjQ0LjEsMjY1LjV6IE0yMjcuNywy
+NjZsLTEyLjksMC41bC0yMS40LTY4LjRjNC45LDMuNyw5LjksNy4yLDE1LDEwLjdMMjI3LjcsMjY2
+eg0KCQkgTTIxMC42LDI2Ni42bC0xMi40LDAuNGwtMjUuMy04NS40YzEuOCwxLjUsMy42LDMuMSw1
+LjQsNC42YzMuMiwyLjcsNi40LDUuMyw5LjcsNy44TDIxMC42LDI2Ni42eiBNMTk0LjIsMjY3LjJs
+LTEzLjgsMC41DQoJCWwtMzAuMi0xMDguMWMyLjcsMi45LDUuNCw1LjgsOC4yLDguNmMyLjksMi45
+LDYsNS44LDguOSw4LjZMMTk0LjIsMjY3LjJ6IE0xNzYuNCwyNjcuOGwtMTEuOSwwLjRsLTE2LjYt
+NjMuNQ0KCQljLTAuNS0xNi40LTEtMzEuNS0xLjMtNDMuN0wxNzYuNCwyNjcuOHogTTE2MC41LDI2
+OC4ybC0xMC4zLDAuNGMtMC43LTE1LjEtMS4zLTMxLTEuNy00Ni40TDE2MC41LDI2OC4yeiBNMzA2
+LDI3Ny40DQoJCWMtMC45LDEuMy0xLjgsMi40LTIuNywzLjZsLTE1Mi41LTNsLTAuMS0xLjRMMzA2
+LDI3Ny40eiBNMzAxLjUsMjYzLjVsLTMuNS03LjhjNS44LDIuMywxMS42LDQuNSwxNy41LDYuNw0K
+CQljLTAuMSwwLjItMC4zLDAuNS0wLjQsMC43TDMwMS41LDI2My41eiBNMTM5LjMsMTY3LjZ2OC4x
+aC02LjJ2Ny41aDYuMnY4LjFoLTYuMnY3LjVoNi4ydjE1LjFoLTYuMnY3LjVoNi4yVjIzN2gtNi4y
+djcuNWg2LjJWMjY5DQoJCWwtNS43LDAuMlYxNTVoNS42djUuMUgxMzN2Ny41TDEzOS4zLDE2Ny42
+TDEzOS4zLDE2Ny42eiBNODAuMywyNTMuOGwxNy4xLTU3LjZjNi45LTkuMiwxNC41LTIwLjgsMjIu
+NS0zNS4yTDg5LjMsMjcwLjUNCgkJQzg1LjksMjY1LjEsODIuOSwyNTkuNSw4MC4zLDI1My44IE03
+Ny45LDI0OC4xYy0zLTcuNy01LjMtMTUuNi02LjgtMjMuOGM0LjgtMy44LDExLjYtMTAuMSwxOS44
+LTE5LjlMNzcuOSwyNDguMXogTTEyMy42LDE2Mi40DQoJCWMwLDExLjUtMC4yLDI1LjYtMC41LDQw
+LjVsLTE3LjYsNjcuMmwtMTIuMiwwLjRMMTIzLjYsMTYyLjR6IE0xMjIuNywyMTkuOGMtMC41LDE2
+LjYtMS4xLDMzLjktMS45LDQ5LjhsLTExLjMsMC40TDEyMi43LDIxOS44eg0KCQkgTTk5LjMsMjg0
+LjFsMjAuNiwwLjhjLTAuNCw2LjMtMC45LDEyLjQtMS4zLDE4Yy0zLjktMy4yLTcuOC02LjUtMTEu
+My0xMC4xQzEwNC41LDI5MCwxMDEuOCwyODcuMSw5OS4zLDI4NC4xIE0yMDAuMSwzMzEuMQ0KCQlj
+LTE2LjQsMC0zMi4yLTMtNDctOC43Yy0wLjYtOC45LTEuMi0xOS43LTEuNy0zMS41bC0xMS45LTR2
+MjkuM2MtMS45LTEtMy44LTItNS43LTMuMnYtMjcuOGw1LjcsMC4ydjAuMmg2LjJsMTEuMSwwLjRs
+MTM4LjEsNC45DQoJCWMtMC42LDAuNi0xLjEsMS4yLTEuNiwxLjdDMjY4LjEsMzE3LjUsMjM1LjEs
+MzMxLjEsMjAwLjEsMzMxLjEiLz4NCjwvZz4NCjwvc3ZnPg0K" alt="Logo"></div>
+    <div>
+      <div class="topbar-title">Draft Intel</div>
+      <div class="topbar-sub">Medical Staff · Prospect Call Sheet</div>
+    </div>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn btn-ghost" onclick="clearForm()">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h12M5 4V3a1 1 0 011-1h4a1 1 0 011 1v1M6 7v5M10 7v5"/></svg>
+      Clear
+    </button>
+    <button class="btn btn-ghost" onclick="openModal()">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 2h12v12H2z"/><path d="M5 8h6M8 5v6"/></svg>
+      Setup Sheets
+    </button>
+    <button class="btn btn-primary" id="submitBtn" onclick="submitToSheets()">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10l4 4 8-8"/></svg>
+      Submit Call
+    </button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- PROGRESS -->
+  <div class="progress-bar-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label" id="progressLabel">0 / 10 complete</div>
+  </div>
+
+  <!-- ① CALL INFO -->
+  <div class="section-label">01 · Call Information</div>
+  <div class="card">
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Date of Call</label>
+        <input type="date" id="callDate">
+      </div>
+      <div class="form-group">
+        <label>Clinician Name</label>
+        <input type="text" id="clinicianName" placeholder="Your name" oninput="updateProgress()">
+      </div>
+    </div>
+  </div>
+
+  <!-- ② PROSPECT INFO -->
+  <div class="section-label">02 · Prospect</div>
+  <div class="card">
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Prospect Name</label>
+        <input type="text" id="prospectName" placeholder="First Last" oninput="updateProgress()">
+      </div>
+      <div class="form-group">
+        <label>Position</label>
+        <select id="position" onchange="updateProgress()">
+          <option value="">Select position</option>
+          <option>PG</option><option>SG</option><option>SF</option>
+          <option>PF</option><option>C</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>School / Program</label>
+        <input type="text" id="school" placeholder="University name" oninput="updateProgress()">
+      </div>
+    </div>
+  </div>
+
+  <!-- ③ SOURCE INFO -->
+  <div class="section-label">03 · Source (Person Being Called)</div>
+  <div class="card">
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Source Name</label>
+        <input type="text" id="sourceName" placeholder="Contact name" oninput="updateProgress()">
+      </div>
+      <div class="form-group">
+        <label>Source Role</label>
+        <select id="sourceRole" onchange="updateProgress()">
+          <option value="">Select role</option>
+          <option>Head Athletic Trainer</option>
+          <option>Assistant Athletic Trainer</option>
+          <option>Head Strength & Conditioning Coach</option>
+          <option>Assistant S&C Coach</option>
+          <option>Team Physician</option>
+          <option>Physical Therapist</option>
+          <option>Head Coach</option>
+          <option>Assistant Coach</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- ④ INJURY HISTORY -->
+  <div class="section-label">04 · Injury History</div>
+  <div class="card">
+    <div id="injuryList"></div>
+    <button class="add-injury-btn" onclick="addInjury()">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="6"/><path d="M7 4v6M4 7h6"/></svg>
+      Add Injury
+    </button>
+    <div style="border-top: 1px solid var(--border); margin-top: 14px; padding-top: 14px;">
+      <div class="form-group">
+        <label>Additional Medical Notes</label>
+        <textarea id="injuryNotes" rows="3" placeholder="Any additional context on injury history, durability concerns, surgical history, chronic conditions, load management history…"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑤ PILLAR RATINGS -->
+  <div class="section-label">05 · Personality Pillar Ratings</div>
+
+  <!-- WORK ETHIC -->
+  <div class="pillar-card" id="pillar-work_ethic">
+    <div class="pillar-header">
+      <div class="pillar-name">Work Ethic</div>
+      <div class="pillar-score-display" id="score-display-work_ethic">—</div>
+    </div>
+    <div class="scale-row">
+      <button class="scale-btn" data-pillar="work_ethic" data-score="1" onclick="setScore('work_ethic',1)">
+        <div class="score-circle">1</div><div class="score-desc">Avoids effort; minimal prep</div>
+      </button>
+      <button class="scale-btn" data-pillar="work_ethic" data-score="2" onclick="setScore('work_ethic',2)">
+        <div class="score-circle">2</div><div class="score-desc">Below average; inconsistent</div>
+      </button>
+      <button class="scale-btn" data-pillar="work_ethic" data-score="3" onclick="setScore('work_ethic',3)">
+        <div class="score-circle">3</div><div class="score-desc">Meets basic standards only</div>
+      </button>
+      <button class="scale-btn" data-pillar="work_ethic" data-score="4" onclick="setScore('work_ethic',4)">
+        <div class="score-circle">4</div><div class="score-desc">Average; needs push at times</div>
+      </button>
+      <button class="scale-btn" data-pillar="work_ethic" data-score="5" onclick="setScore('work_ethic',5)">
+        <div class="score-circle">5</div><div class="score-desc">Consistently hard; self-motivated</div>
+      </button>
+      <button class="scale-btn" data-pillar="work_ethic" data-score="6" onclick="setScore('work_ethic',6)">
+        <div class="score-circle">6</div><div class="score-desc">Outworks peers; tireless prep</div>
+      </button>
+      <button class="scale-btn" data-pillar="work_ethic" data-score="7" onclick="setScore('work_ethic',7)">
+        <div class="score-circle">7</div><div class="score-desc">Elite obsession; sets standard</div>
+      </button>
+    </div>
+    <div class="scale-ends"><span>low</span><span>elite</span></div>
+    <div class="pillar-notes">
+      <textarea id="notes-work_ethic" placeholder="Notes on work ethic, body maintenance habits, daily routine…" oninput="updateProgress()"></textarea>
+    </div>
+    <div class="call-questions">
+      <div class="call-questions-toggle" onclick="toggleQuestions('work_ethic_q')">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2l4 4-4 4"/></svg>
+        Call Guide Questions
+      </div>
+      <div class="questions-list" id="work_ethic_q">
+        <div class="q-item"><span class="q-num">Q1</span>Walk me through what his daily maintenance routine looked like before and after practice — was that self-driven or did it need to be prompted?</div>
+        <div class="q-item"><span class="q-num">Q2</span>How diligent was he with his strength and conditioning programming? Did he follow it to the letter, cut corners, or push for more?</div>
+        <div class="q-item"><span class="q-num">Q3</span>Did he ever have to sit out of practices during the season in order to stay available for games — and if so, how did he handle that?</div>
+        <div class="q-item"><span class="q-num">Q4</span>Does he ever skip or shorten sessions — and does he tend to avoid the work he needs most to improve, or does he attack his weaknesses?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPETITIVENESS -->
+  <div class="pillar-card" id="pillar-competitiveness">
+    <div class="pillar-header">
+      <div class="pillar-name">Competitiveness</div>
+      <div class="pillar-score-display" id="score-display-competitiveness">—</div>
+    </div>
+    <div class="scale-row">
+      <button class="scale-btn" data-pillar="competitiveness" data-score="1" onclick="setScore('competitiveness',1)"><div class="score-circle">1</div><div class="score-desc">Passive; indifferent to outcome</div></button>
+      <button class="scale-btn" data-pillar="competitiveness" data-score="2" onclick="setScore('competitiveness',2)"><div class="score-circle">2</div><div class="score-desc">Low drive; rarely competes with intensity</div></button>
+      <button class="scale-btn" data-pillar="competitiveness" data-score="3" onclick="setScore('competitiveness',3)"><div class="score-circle">3</div><div class="score-desc">Competes when comfortable</div></button>
+      <button class="scale-btn" data-pillar="competitiveness" data-score="4" onclick="setScore('competitiveness',4)"><div class="score-circle">4</div><div class="score-desc">Average; responds to big moments</div></button>
+      <button class="scale-btn" data-pillar="competitiveness" data-score="5" onclick="setScore('competitiveness',5)"><div class="score-circle">5</div><div class="score-desc">Strong desire; raises level late</div></button>
+      <button class="scale-btn" data-pillar="competitiveness" data-score="6" onclick="setScore('competitiveness',6)"><div class="score-circle">6</div><div class="score-desc">Thrives under pressure</div></button>
+      <button class="scale-btn" data-pillar="competitiveness" data-score="7" onclick="setScore('competitiveness',7)"><div class="score-circle">7</div><div class="score-desc">Hates losing; refuses to be outcompeted</div></button>
+    </div>
+    <div class="scale-ends"><span>low</span><span>elite</span></div>
+    <div class="pillar-notes">
+      <textarea id="notes-competitiveness" placeholder="Notes on pain tolerance, playing through injury, late-game behavior…" oninput="updateProgress()"></textarea>
+    </div>
+    <div class="call-questions">
+      <div class="call-questions-toggle" onclick="toggleQuestions('competitiveness_q')">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2l4 4-4 4"/></svg>
+        Call Guide Questions
+      </div>
+      <div class="questions-list" id="competitiveness_q">
+        <div class="q-item"><span class="q-num">Q1</span>How would you describe his pain tolerance? Give me an example of a time he played through something that most guys would have sat out.</div>
+        <div class="q-item"><span class="q-num">Q2</span>When he was dealing with something painful but manageable and cleared to play, who initiated that conversation — him pushing to be out there, or your staff needing to reassure him he could play?</div>
+        <div class="q-item"><span class="q-num">Q3</span>Did he ever push back on a decision to hold him out? Was that frustration or a mature conversation?</div>
+        <div class="q-item"><span class="q-num">Q4</span>When the team was losing or out of it late in a game, did his effort level change — or was he the same guy regardless of the scoreboard?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOVE OF THE GAME -->
+  <div class="pillar-card" id="pillar-love_of_game">
+    <div class="pillar-header">
+      <div class="pillar-name">Love of the Game</div>
+      <div class="pillar-score-display" id="score-display-love_of_game">—</div>
+    </div>
+    <div class="scale-row">
+      <button class="scale-btn" data-pillar="love_of_game" data-score="1" onclick="setScore('love_of_game',1)"><div class="score-circle">1</div><div class="score-desc">Treats sport as obligation</div></button>
+      <button class="scale-btn" data-pillar="love_of_game" data-score="2" onclick="setScore('love_of_game',2)"><div class="score-circle">2</div><div class="score-desc">Plays for external reasons</div></button>
+      <button class="scale-btn" data-pillar="love_of_game" data-score="3" onclick="setScore('love_of_game',3)"><div class="score-circle">3</div><div class="score-desc">Enjoyment is conditional</div></button>
+      <button class="scale-btn" data-pillar="love_of_game" data-score="4" onclick="setScore('love_of_game',4)"><div class="score-circle">4</div><div class="score-desc">Likes the game; ebbs & flows</div></button>
+      <button class="scale-btn" data-pillar="love_of_game" data-score="5" onclick="setScore('love_of_game',5)"><div class="score-circle">5</div><div class="score-desc">Genuine passion; goes beyond required</div></button>
+      <button class="scale-btn" data-pillar="love_of_game" data-score="6" onclick="setScore('love_of_game',6)"><div class="score-circle">6</div><div class="score-desc">Deep intrinsic motivation</div></button>
+      <button class="scale-btn" data-pillar="love_of_game" data-score="7" onclick="setScore('love_of_game',7)"><div class="score-circle">7</div><div class="score-desc">Game is a lifestyle</div></button>
+    </div>
+    <div class="scale-ends"><span>low</span><span>elite</span></div>
+    <div class="pillar-notes">
+      <textarea id="notes-love_of_game" placeholder="Notes on intrinsic motivation, off-day habits, facility presence…" oninput="updateProgress()"></textarea>
+    </div>
+    <div class="call-questions">
+      <div class="call-questions-toggle" onclick="toggleQuestions('love_q')">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2l4 4-4 4"/></svg>
+        Call Guide Questions
+      </div>
+      <div class="questions-list" id="love_q">
+        <div class="q-item"><span class="q-num">Q1</span>Outside of required team activities, was he someone your staff saw in the facility on off days — doing extra work, watching film, getting treatment proactively?</div>
+        <div class="q-item"><span class="q-num">Q2</span>Could you tell this was something he genuinely loved, or did it feel more transactional — like he was there to get to the next level?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTELLIGENCE -->
+  <div class="pillar-card" id="pillar-intelligence">
+    <div class="pillar-header">
+      <div class="pillar-name">Intelligence</div>
+      <div class="pillar-score-display" id="score-display-intelligence">—</div>
+    </div>
+    <div class="scale-row">
+      <button class="scale-btn" data-pillar="intelligence" data-score="1" onclick="setScore('intelligence',1)"><div class="score-circle">1</div><div class="score-desc">Misreads situations; slow to process</div></button>
+      <button class="scale-btn" data-pillar="intelligence" data-score="2" onclick="setScore('intelligence',2)"><div class="score-circle">2</div><div class="score-desc">Repeats mistakes; poor reads</div></button>
+      <button class="scale-btn" data-pillar="intelligence" data-score="3" onclick="setScore('intelligence',3)"><div class="score-circle">3</div><div class="score-desc">Understands basics; limited anticipation</div></button>
+      <button class="scale-btn" data-pillar="intelligence" data-score="4" onclick="setScore('intelligence',4)"><div class="score-circle">4</div><div class="score-desc">Solid IQ; learns from film</div></button>
+      <button class="scale-btn" data-pillar="intelligence" data-score="5" onclick="setScore('intelligence',5)"><div class="score-circle">5</div><div class="score-desc">Quick processor; anticipates well</div></button>
+      <button class="scale-btn" data-pillar="intelligence" data-score="6" onclick="setScore('intelligence',6)"><div class="score-circle">6</div><div class="score-desc">High game IQ; sees plays early</div></button>
+      <button class="scale-btn" data-pillar="intelligence" data-score="7" onclick="setScore('intelligence',7)"><div class="score-circle">7</div><div class="score-desc">Elite reader; processes at top speed</div></button>
+    </div>
+    <div class="scale-ends"><span>low</span><span>elite</span></div>
+    <div class="pillar-notes">
+      <textarea id="notes-intelligence" placeholder="Notes on body awareness, ability to follow protocol, how he communicates about his body…" oninput="updateProgress()"></textarea>
+    </div>
+    <div class="call-questions">
+      <div class="call-questions-toggle" onclick="toggleQuestions('intel_q')">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2l4 4-4 4"/></svg>
+        Call Guide Questions
+      </div>
+      <div class="questions-list" id="intel_q">
+        <div class="q-item"><span class="q-num">Q1</span>How quickly did he grasp injury prevention protocols or new strength programming? Did he ask why things worked, or just go through the motions?</div>
+        <div class="q-item"><span class="q-num">Q2</span>If you gave him a self-care or rehab plan to follow on his own, how well did he execute it — and could he explain back to you what he was doing and why?</div>
+        <div class="q-item"><span class="q-num">Q3</span>How would you describe his basketball IQ — did he understand the game beyond his own role, pick up schemes quickly, and make reads that most players his age wouldn't make?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESILIENCY -->
+  <div class="pillar-card" id="pillar-resiliency">
+    <div class="pillar-header">
+      <div class="pillar-name">Resiliency</div>
+      <div class="pillar-score-display" id="score-display-resiliency">—</div>
+    </div>
+    <div class="scale-row">
+      <button class="scale-btn" data-pillar="resiliency" data-score="1" onclick="setScore('resiliency',1)"><div class="score-circle">1</div><div class="score-desc">Breaks down under adversity</div></button>
+      <button class="scale-btn" data-pillar="resiliency" data-score="2" onclick="setScore('resiliency',2)"><div class="score-circle">2</div><div class="score-desc">Prolonged slumps; slow recovery</div></button>
+      <button class="scale-btn" data-pillar="resiliency" data-score="3" onclick="setScore('resiliency',3)"><div class="score-circle">3</div><div class="score-desc">Bounces back slowly; needs support</div></button>
+      <button class="scale-btn" data-pillar="resiliency" data-score="4" onclick="setScore('resiliency',4)"><div class="score-circle">4</div><div class="score-desc">Average recovery; setbacks linger</div></button>
+      <button class="scale-btn" data-pillar="resiliency" data-score="5" onclick="setScore('resiliency',5)"><div class="score-circle">5</div><div class="score-desc">Recovers well; uses failure as fuel</div></button>
+      <button class="scale-btn" data-pillar="resiliency" data-score="6" onclick="setScore('resiliency',6)"><div class="score-circle">6</div><div class="score-desc">Strong mental toughness</div></button>
+      <button class="scale-btn" data-pillar="resiliency" data-score="7" onclick="setScore('resiliency',7)"><div class="score-circle">7</div><div class="score-desc">Unshakeable; adversity fuels performance</div></button>
+    </div>
+    <div class="scale-ends"><span>low</span><span>elite</span></div>
+    <div class="pillar-notes">
+      <textarea id="notes-resiliency" placeholder="Notes on mental toughness, setback response, injury comebacks…" oninput="updateProgress()"></textarea>
+    </div>
+    <div class="call-questions">
+      <div class="call-questions-toggle" onclick="toggleQuestions('resil_q')">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2l4 4-4 4"/></svg>
+        Call Guide Questions
+      </div>
+      <div class="questions-list" id="resil_q">
+        <div class="q-item"><span class="q-num">Q1</span>What was the hardest thing he dealt with physically while with you — and how did he respond mentally and emotionally?</div>
+        <div class="q-item"><span class="q-num">Q2</span>If he had a bad game personally but the team won, was he able to enjoy that — or did the individual performance override everything?</div>
+        <div class="q-item"><span class="q-num">Q3</span>Did you ever see him spiral after an injury setback or a rough stretch, or did he redirect energy into what he could control?</div>
+        <div class="q-item"><span class="q-num">Q4</span>Were there moments where you were more worried about him mentally than physically? How did he come out of it?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SELF-AWARENESS -->
+  <div class="pillar-card" id="pillar-self_awareness">
+    <div class="pillar-header">
+      <div class="pillar-name">Self-Awareness</div>
+      <div class="pillar-score-display" id="score-display-self_awareness">—</div>
+    </div>
+    <div class="scale-row">
+      <button class="scale-btn" data-pillar="self_awareness" data-score="1" onclick="setScore('self_awareness',1)"><div class="score-circle">1</div><div class="score-desc">No recognition of strengths/weaknesses</div></button>
+      <button class="scale-btn" data-pillar="self_awareness" data-score="2" onclick="setScore('self_awareness',2)"><div class="score-circle">2</div><div class="score-desc">Deflects feedback; blames others</div></button>
+      <button class="scale-btn" data-pillar="self_awareness" data-score="3" onclick="setScore('self_awareness',3)"><div class="score-circle">3</div><div class="score-desc">Limited insight; reluctant to accept feedback</div></button>
+      <button class="scale-btn" data-pillar="self_awareness" data-score="4" onclick="setScore('self_awareness',4)"><div class="score-circle">4</div><div class="score-desc">Moderate; coachable with guidance</div></button>
+      <button class="scale-btn" data-pillar="self_awareness" data-score="5" onclick="setScore('self_awareness',5)"><div class="score-circle">5</div><div class="score-desc">Seeks feedback proactively</div></button>
+      <button class="scale-btn" data-pillar="self_awareness" data-score="6" onclick="setScore('self_awareness',6)"><div class="score-circle">6</div><div class="score-desc">High self-knowledge; adjusts in real time</div></button>
+      <button class="scale-btn" data-pillar="self_awareness" data-score="7" onclick="setScore('self_awareness',7)"><div class="score-circle">7</div><div class="score-desc">Exceptional insight; holds self accountable</div></button>
+    </div>
+    <div class="scale-ends"><span>low</span><span>elite</span></div>
+    <div class="pillar-notes">
+      <textarea id="notes-self_awareness" placeholder="Notes on coachability, feedback reception, proactive communication…" oninput="updateProgress()"></textarea>
+    </div>
+    <div class="call-questions">
+      <div class="call-questions-toggle" onclick="toggleQuestions('self_q')">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2l4 4-4 4"/></svg>
+        Call Guide Questions
+      </div>
+      <div class="questions-list" id="self_q">
+        <div class="q-item"><span class="q-num">Q1</span>How open was he to feedback on his programming, habits, or body — did he take it on board, push back constructively, or tune it out?</div>
+        <div class="q-item"><span class="q-num">Q2</span>Would you consider him body aware? Does he come to you regularly with things he's noticing — and was that generally a good sign of attentiveness or more of a concern?</div>
+        <div class="q-item"><span class="q-num">Q3</span>Did he have a realistic understanding of his own limitations — physically and as a player — or did ego get in the way?</div>
+        <div class="q-item"><span class="q-num">Q4</span>How many outside influences does he have around him — family, handlers, agents, entourage? Did those relationships ever affect his focus or decision-making?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑥ OVERALL -->
+  <div class="section-label">06 · Overall Assessment</div>
+  <div class="card">
+    <div class="form-group">
+      <label>Composite Score</label>
+      <div style="display:flex; align-items:center; gap:10px; margin-top:6px;">
+        <div style="font-family:'DM Mono',monospace; font-size:32px; font-weight:500; color:var(--text-dim)" id="compositeScore">—</div>
+        <div style="font-size:11px; color:var(--text-dim); line-height:1.4">avg across<br>all 6 pillars</div>
+      </div>
+    </div>
+    <div class="form-group" style="margin-top:16px">
+      <label>Overall Notes / Character Read</label>
+      <textarea id="overallNotes" rows="4" placeholder="What would you want us to know about him that wouldn't appear in any report? What did the source say when you gave them silence at the end…" oninput="updateProgress()"></textarea>
+    </div>
+    <div class="form-group" style="margin-top:12px">
+      <label>Taking basketball talent out of the equation, would you want this player back on your team next year?</label>
+      <textarea id="wantBackQ" rows="2" placeholder="Source's response…"></textarea>
+    </div>
+    <div class="form-group" style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border)">
+      <label>Recommendation</label>
+      <div class="flag-row" style="margin-top:8px; flex-wrap:wrap;">
+        <button class="flag-btn" id="flag-strong_yes" onclick="setFlag('strong_yes')"><div class="dot"></div>Strong Yes</button>
+        <button class="flag-btn" id="flag-yes" onclick="setFlag('yes')"><div class="dot"></div>Yes</button>
+        <button class="flag-btn" id="flag-yes_concerns" onclick="setFlag('yes_concerns')"><div class="dot"></div>Yes w/ Concerns</button>
+        <button class="flag-btn" id="flag-caution" onclick="setFlag('caution')"><div class="dot"></div>Proceed w/ Caution</button>
+        <button class="flag-btn" id="flag-red" onclick="setFlag('red')"><div class="dot"></div>Red Flag</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end main -->
+
+<!-- SUBMIT BAR -->
+<div class="submit-area">
+  <div class="submit-status" id="submitStatus">Fill in required fields to submit</div>
+  <div class="submit-actions">
+    <button class="btn btn-ghost" onclick="exportCSV()">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12h10M8 2v8M5 7l3 3 3-3"/></svg>
+      Export CSV
+    </button>
+    <button class="btn btn-primary" id="submitBtn2" onclick="submitToSheets()">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10l4 4 8-8"/></svg>
+      Submit to Google Sheets
+    </button>
+  </div>
+</div>
+
+<!-- SETUP MODAL -->
+<div class="modal-overlay" id="setupModal">
+  <div class="modal">
+    <div class="modal-title">Google Sheets Connection</div>
+    <div class="modal-sub">This app is connected to your Google Sheet via SheetDB. Submissions go directly to your sheet — no additional setup needed.</div>
+    <div class="modal-steps">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div>Make sure your Google Sheet has the following header row in Row 1 exactly as shown:</div>
+      </div>
+      <div class="code-block">Timestamp | Call Date | Clinician | Prospect | Position | School | Source Name | Source Role | Injuries | Injury Notes | Work Ethic Score | Work Ethic Notes | Competitiveness Score | Competitiveness Notes | Love of Game Score | Love of Game Notes | Intelligence Score | Intelligence Notes | Resiliency Score | Resiliency Notes | Self-Awareness Score | Self-Awareness Notes | Composite Score | Recommendation | Overall Notes | Would Want Back</div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div>Hit <strong>Test Connection</strong> below to confirm everything is working before your first submission.</div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Close</button>
+      <button class="btn btn-success" onclick="testConnection()">Test Connection</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="toast-icon" id="toastIcon">✓</span>
+  <span id="toastMsg">Submitted successfully</span>
+</div>
+
+<script>
+  // ── STATE ──
+  const scores = { work_ethic: null, competitiveness: null, love_of_game: null, intelligence: null, resiliency: null, self_awareness: null };
+  let currentFlag = null;
+  let injuryCount = 0;
+
+  // ── INIT ──
+  document.getElementById('callDate').valueAsDate = new Date();
+  const savedUrl = localStorage.getItem('sheetsUrl');
+  if (savedUrl) document.getElementById('sheetsUrl').value = savedUrl;
+  updateProgress();
+
+  // ── SCORE SELECTION ──
+  function setScore(pillar, score) {
+    scores[pillar] = score;
+    document.querySelectorAll(`.scale-btn[data-pillar="${pillar}"]`).forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.dataset.score) === score);
+    });
+    const display = document.getElementById(`score-display-${pillar}`);
+    const colors = { 1:'var(--s1)',2:'var(--s2)',3:'var(--s3)',4:'var(--s4)',5:'var(--s5)',6:'var(--s6)',7:'var(--s7)' };
+    display.textContent = score;
+    display.style.color = colors[score];
+    updateComposite();
+    updateProgress();
+  }
+
+  function updateComposite() {
+    const vals = Object.values(scores).filter(v => v !== null);
+    if (vals.length === 0) { document.getElementById('compositeScore').textContent = '—'; return; }
+    const avg = (vals.reduce((a,b) => a+b, 0) / vals.length).toFixed(1);
+    const el = document.getElementById('compositeScore');
+    el.textContent = avg;
+    const num = parseFloat(avg);
+    el.style.color = num >= 5.5 ? 'var(--s7)' : num >= 4 ? 'var(--s5)' : num >= 2.5 ? 'var(--s3)' : 'var(--s1)';
+  }
+
+  // ── FLAG ──
+  const flagColors = {
+    strong_yes: 'green', yes: 'green', yes_concerns: 'yellow', caution: 'orange', red: 'red'
+  };
+  function setFlag(flag) {
+    currentFlag = flag;
+    ['strong_yes','yes','yes_concerns','caution','red'].forEach(f => {
+      const el = document.getElementById(`flag-${f}`);
+      if (el) el.className = `flag-btn${f===flag ? ` active-${flagColors[f]}` : ''}`;
+    });
+    updateProgress();
+  }
+
+  // ── INJURIES ──
+  function addInjury() {
+    injuryCount++;
+    const id = injuryCount;
+    const list = document.getElementById('injuryList');
+    const row = document.createElement('div');
+    row.className = 'injury-row'; row.id = `injury-${id}`;
+    row.innerHTML = `
+      <div class="form-group"><label>Body Part / Injury</label><input type="text" id="inj-type-${id}" placeholder="e.g. Left knee — ACL"></div>
+      <div class="form-group"><label>Date / Season</label><input type="text" id="inj-date-${id}" placeholder="e.g. Jan 2024"></div>
+      <div class="form-group"><label>Recovery / Status</label><input type="text" id="inj-status-${id}" placeholder="e.g. Full recovery, 6 months"></div>
+      <button class="remove-btn" onclick="removeInjury(${id})" title="Remove">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 2l10 10M12 2L2 12"/></svg>
+      </button>`;
+    list.appendChild(row);
+  }
+
+  function removeInjury(id) {
+    document.getElementById(`injury-${id}`).remove();
+  }
+
+  // ── CALL GUIDE TOGGLE ──
+  function toggleQuestions(id) {
+    const list = document.getElementById(id);
+    const toggle = list.previousElementSibling;
+    list.classList.toggle('open');
+    toggle.classList.toggle('open');
+  }
+
+  // ── PROGRESS ──
+  function updateProgress() {
+    const fields = [
+      document.getElementById('clinicianName').value.trim(),
+      document.getElementById('prospectName').value.trim(),
+      document.getElementById('position').value,
+      document.getElementById('school').value.trim(),
+      document.getElementById('sourceName').value.trim(),
+      document.getElementById('sourceRole').value,
+      scores.work_ethic, scores.competitiveness, scores.love_of_game,
+      scores.intelligence, scores.resiliency, scores.self_awareness,
+      currentFlag,
+      document.getElementById('overallNotes').value.trim()
+    ];
+    const filled = fields.filter(f => f !== null && f !== '' && f !== undefined).length;
+    const total = fields.length;
+    const pct = Math.round((filled / total) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = `${filled} / ${total} complete`;
+    const allPillars = Object.values(scores).every(s => s !== null);
+    const required = document.getElementById('clinicianName').value.trim() &&
+      document.getElementById('prospectName').value.trim() &&
+      document.getElementById('sourceName').value.trim() &&
+      allPillars;
+    document.getElementById('submitStatus').innerHTML = required
+      ? `Ready to submit — <span>${document.getElementById('prospectName').value.trim()}</span>`
+      : 'Fill in required fields to submit';
+  }
+
+  // ── COLLECT DATA ──
+  function collectRow() {
+    const injuries = [];
+    document.querySelectorAll('[id^="inj-type-"]').forEach(el => {
+      const id = el.id.replace('inj-type-','');
+      const type = el.value; const date = document.getElementById(`inj-date-${id}`)?.value || '';
+      const status = document.getElementById(`inj-status-${id}`)?.value || '';
+      if (type) injuries.push(`${type} (${date}) — ${status}`);
+    });
+    const compositeEl = document.getElementById('compositeScore').textContent;
+    return [
+      new Date().toISOString(),
+      document.getElementById('callDate').value,
+      document.getElementById('clinicianName').value,
+      document.getElementById('prospectName').value,
+      document.getElementById('position').value,
+      document.getElementById('school').value,
+      document.getElementById('sourceName').value,
+      document.getElementById('sourceRole').value,
+      injuries.join('; '),
+      document.getElementById('injuryNotes').value,
+      scores.work_ethic || '',
+      document.getElementById('notes-work_ethic').value,
+      scores.competitiveness || '',
+      document.getElementById('notes-competitiveness').value,
+      scores.love_of_game || '',
+      document.getElementById('notes-love_of_game').value,
+      scores.intelligence || '',
+      document.getElementById('notes-intelligence').value,
+      scores.resiliency || '',
+      document.getElementById('notes-resiliency').value,
+      scores.self_awareness || '',
+      document.getElementById('notes-self_awareness').value,
+      compositeEl === '—' ? '' : compositeEl,
+      currentFlag || '',
+      document.getElementById('overallNotes').value,
+      document.getElementById('wantBackQ').value,
+    ];
+  }
+
+  // ── SUBMIT TO SHEETS ──
+  const SHEETDB_URL = 'https://sheetdb.io/api/v1/i8yaochvmiyea';
+  const HEADERS = ['Timestamp','Call Date','Clinician','Prospect','Position','School','Source Name','Source Role','Injuries','Injury Notes','Work Ethic Score','Work Ethic Notes','Competitiveness Score','Competitiveness Notes','Love of Game Score','Love of Game Notes','Intelligence Score','Intelligence Notes','Resiliency Score','Resiliency Notes','Self-Awareness Score','Self-Awareness Notes','Composite Score','Recommendation','Overall Notes','Would Want Back'];
+
+  function collectData() {
+    const row = collectRow();
+    const data = {};
+    HEADERS.forEach((h, i) => { data[h] = row[i] ?? ''; });
+    return data;
+  }
+
+  async function submitToSheets() {
+    const prospect = document.getElementById('prospectName').value.trim();
+    showToast('⏳', 'Submitting to Google Sheets…');
+    try {
+      const res = await fetch(SHEETDB_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: [collectData()] })
+      });
+      if (res.ok) {
+        showToast('✓', `Submitted — ${prospect || 'Prospect'}`);
+      } else {
+        showToast('✗', `Error ${res.status} — check your SheetDB connection.`);
+      }
+    } catch(e) {
+      showToast('✗', 'Submission failed. Check your internet connection.');
+    }
+  }
+
+  // ── EXPORT CSV ──
+  function exportCSV() {
+    const headers = ['Timestamp','Call Date','Clinician','Prospect','Position','School','Source Name','Source Role','Injuries','Injury Notes','Work Ethic Score','Work Ethic Notes','Competitiveness Score','Competitiveness Notes','Love of Game Score','Love of Game Notes','Intelligence Score','Intelligence Notes','Resiliency Score','Resiliency Notes','Self-Awareness Score','Self-Awareness Notes','Composite Score','Recommendation','Overall Notes','Would Want Back'];
+    const row = collectRow();
+    const escape = v => `"${String(v).replace(/"/g,'""')}"`;
+    const csv = [headers.map(escape).join(','), row.map(escape).join(',')].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    const prospect = document.getElementById('prospectName').value.trim().replace(/\s+/g,'_') || 'prospect';
+    a.download = `intel_${prospect}_${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    showToast('↓', 'CSV downloaded');
+  }
+
+  // ── MODAL ──
+  function openModal() { document.getElementById('setupModal').classList.add('open'); }
+  function closeModal() { document.getElementById('setupModal').classList.remove('open'); }
+  document.getElementById('setupModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+  async function testConnection() {
+    showToast('⏳', 'Testing connection…');
+    try {
+      const res = await fetch(SHEETDB_URL, { method: 'GET' });
+      if (res.ok) {
+        showToast('✓', 'Connected to Google Sheets!');
+        closeModal();
+      } else {
+        showToast('✗', `Error ${res.status} — check SheetDB settings.`);
+      }
+    } catch(e) { showToast('✗', 'Could not reach SheetDB.'); }
+  }
+
+  // ── CLEAR ──
+  function clearForm() {
+    if (!confirm('Clear all fields and start a new call?')) return;
+    document.querySelectorAll('input, select, textarea').forEach(el => { el.value = ''; });
+    document.getElementById('callDate').valueAsDate = new Date();
+    Object.keys(scores).forEach(k => { scores[k] = null; });
+    document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.pillar-score-display').forEach(d => { d.textContent = '—'; d.style.color = ''; });
+    document.getElementById('compositeScore').textContent = '—';
+    document.getElementById('compositeScore').style.color = '';
+    currentFlag = null;
+    ['strong_yes','yes','yes_concerns','caution','red'].forEach(f => {
+      const el = document.getElementById(`flag-${f}`);
+      if (el) el.className = 'flag-btn';
+    });
+    document.getElementById('injuryList').innerHTML = '';
+    document.getElementById('injuryNotes').value = '';
+    injuryCount = 0;
+    updateProgress();
+    showToast('↺', 'Form cleared');
+  }
+
+  // ── TOAST ──
+  function showToast(icon, msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toastIcon').textContent = icon;
+    document.getElementById('toastMsg').textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+</script>
+</body>
+</html>
