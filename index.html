@@ -296,6 +296,58 @@
     background: var(--surface2); border: 1px solid var(--border);
     border-radius: 20px; padding: 3px 10px; font-size: 11px; color: var(--text-muted);
   }
+  /* ── MOBILE RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .topbar { padding: 0 16px; height: 52px; }
+    .topbar-sub { display: none; }
+    .topbar-actions .btn-ghost:not(:last-child) { display: none; }
+    .topbar-actions .btn span { display: none; }
+    .topbar-actions .btn svg { width: 16px; height: 16px; }
+    .topbar-actions .btn { padding: 8px 10px; }
+
+    .main { padding: 20px 14px 100px; }
+
+    .form-grid, .form-grid.three { grid-template-columns: 1fr; }
+    .rec-grid { grid-template-columns: 1fr; }
+
+    .scale-row {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 3px;
+    }
+    .scale-btn { padding: 6px 2px 8px; border-radius: 6px; }
+    .score-circle { width: 24px; height: 24px; font-size: 11px; }
+    .score-desc { font-size: 7.5px; line-height: 1.2; }
+
+    .pillar-header { padding: 12px 14px 0; }
+    .pillar-name { font-size: 13px; }
+    .pillar-score-display { font-size: 18px; }
+    .scale-row { padding: 10px 14px 0; }
+    .scale-ends { padding: 4px 14px 0; }
+    .pillar-notes { padding: 10px 14px 14px; }
+    .call-questions { padding: 0 14px 12px; }
+
+    .card { padding: 16px; }
+
+    .injury-row {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+    }
+    .injury-row > div:nth-child(3) { grid-column: 1 / -1; }
+    .remove-btn { grid-row: 1; grid-column: 2; justify-self: end; align-self: start; margin-top: 22px; }
+
+    .flag-row { gap: 7px; }
+    .flag-btn { padding: 7px 10px; font-size: 11px; }
+
+    .submit-area { padding: 12px 16px; }
+    .submit-status { font-size: 11px; max-width: 140px; }
+    .submit-actions .btn-ghost { display: none; }
+
+    .modal { padding: 20px 16px; margin: 16px; }
+    .code-block { font-size: 9.5px; }
+
+    .progress-bar-wrap { margin-bottom: 18px; }
+  }
 </style>
 </head>
 <body>
